@@ -29,26 +29,25 @@ start-router-container:
 	podman run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
 
 start-services:
-	pip install -r requirements.txt
 	python server.py --service a --port 9191 > service-a.log 2>&1 &
 	python server.py --service b --port 9292 > service-b.log 2>&1 &
 	python server.py --service c --port 9393 > service-c.log 2>&1 &
 
 _client_low:
-	locust \
+	podman run -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
 		--headless \
 		--users 10 \
 		--spawn-rate 1 \
 		--run-time 2m \
-		-f $(LOCUSTFILE)
+		-f /mnt/locust/$(LOCUSTFILE)
 
 _client:
-	locust \
+	podman run -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
 		--headless \
 		--users 500 \
 		--spawn-rate 5 \
 		--run-time 2m \
-		-f $(LOCUSTFILE)
+		-f /mnt/locust/$(LOCUSTFILE)
 
 client-router: LOCUSTFILE=locustfile.py
 client-router: _client
