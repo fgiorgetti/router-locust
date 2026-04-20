@@ -89,3 +89,11 @@ If you continue to run `client-router` template another one or two times, the ro
 becomes irresponsive, even after all client connections are closed, not recovering.
 
 No error indication can be found in the router logs.
+
+# Teardown
+
+Run the following command to clean up the test environment:
+
+```sh
+make stop-all
+```
