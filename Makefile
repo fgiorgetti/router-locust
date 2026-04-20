@@ -23,10 +23,10 @@ start-router-binary:
 	skrouterd -c topology-1/skrouterd-binary.json &
 
 stop-router-container:
-	podman rm -f router-locust
+	docker rm -f router-locust
 
 start-router-container:
-	podman run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
+	docker run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
 
 start-services:
 	python server.py --service a --port 9191 > service-a.log 2>&1 &
@@ -34,7 +34,7 @@ start-services:
 	python server.py --service c --port 9393 > service-c.log 2>&1 &
 
 _client_low:
-	podman run -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
+	docker run --rm -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
 		--headless \
 		--users 10 \
 		--spawn-rate 1 \
@@ -42,7 +42,7 @@ _client_low:
 		-f /mnt/locust/$(LOCUSTFILE)
 
 _client:
-	podman run -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
+	docker run --rm -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
 		--headless \
 		--users 500 \
 		--spawn-rate 5 \

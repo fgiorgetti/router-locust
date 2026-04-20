@@ -9,6 +9,6 @@ if ( command -v skstat > /dev/null 2>&1 ); then
   echo "skstat -c: $(skstat -c | wc -l)"
   echo "skstat -l: $(skstat -l | wc -l)"
 else
-  echo "skstat -c: $(podman exec router-locust skstat -c | wc -l)"
-  echo "skstat -l: $(podman exec router-locust skstat -l | wc -l)"
+  echo "skstat -c: $(docker exec router-locust skstat -c | wc -l)"
+  echo "skstat -l: $(docker exec router-locust skstat -l | wc -l)"
 fi
