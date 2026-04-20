@@ -26,6 +26,7 @@ stop-router-container:
 	docker rm -f router-locust
 
 start-router-container:
+	docker pull $(IMAGE)
 	docker run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
 
 start-services:
