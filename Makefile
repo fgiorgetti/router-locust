@@ -1,4 +1,5 @@
 IMAGE := quay.io/skupper/skupper-router:main
+CONTAINER := docker
 
 start-all: start-services start-router-container
 stop-all: stop-router-container stop-services 
@@ -7,7 +8,7 @@ start-all-binary: start-services start-router-binary
 stop-all-binary: stop-router-binary stop-services 
 
 monitor:
-	watch -n 1 ./monitor.sh
+	watch -n 1 ./monitor.sh $(CONTAINER)
 
 stop-services:
 	@pgrep -f 'python server.py \-\-service ' | xargs -r kill -9
@@ -23,11 +24,11 @@ start-router-binary:
 	skrouterd -c topology-1/skrouterd-binary.json &
 
 stop-router-container:
-	docker rm -f router-locust
+	$(CONTAINER) rm -f router-locust
 
 start-router-container:
-	docker pull $(IMAGE)
-	docker run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
+	$(CONTAINER) pull $(IMAGE)
+	$(CONTAINER) run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
 
 start-services:
 	python server.py --service a --port 9191 > service-a.log 2>&1 &
@@ -35,7 +36,7 @@ start-services:
 	python server.py --service c --port 9393 > service-c.log 2>&1 &
 
 _client_low:
-	docker run --rm -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
+	$(CONTAINER) run --rm -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
 		--headless \
 		--users 10 \
 		--spawn-rate 1 \
@@ -43,7 +44,7 @@ _client_low:
 		-f /mnt/locust/$(LOCUSTFILE)
 
 _client:
-	docker run --rm -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
+	$(CONTAINER) run --rm -v "./:/mnt/locust/:z" --network host docker.io/locustio/locust \
 		--headless \
 		--users 500 \
 		--spawn-rate 5 \
