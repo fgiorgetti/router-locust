@@ -1,3 +1,5 @@
+IMAGE := quay.io/skupper/skupper-router:main
+
 start-all: start-services start-router-container
 stop-all: stop-router-container stop-services 
 
@@ -24,7 +26,7 @@ stop-router-container:
 	podman rm -f router-locust
 
 start-router-container:
-	podman run --rm --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json -e CONFIG_FILE=/etc/skupper-router/skrouterd.json quay.io/skupper/skupper-router:main skrouterd -c /tmp/skrouterd.json
+	podman run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
 
 start-services:
 	pip install -r requirements.txt
