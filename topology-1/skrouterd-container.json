@@ -1,0 +1,82 @@
+[
+    [
+        "router",
+        {
+            "id": "single-router",
+            "mode": "interior",
+            "helloMaxAgeSeconds": "3"
+        }
+    ],
+    [
+        "listener",
+        {
+            "name": "amqp",
+            "host": "localhost",
+            "port": 5672
+        }
+    ],
+    [
+        "address",
+        {
+            "prefix": "mc",
+            "distribution": "multicast"
+        }
+    ],
+    [
+        "tcpListener",
+        {
+            "host": "0.0.0.0",
+            "port": "8181",
+            "address": "service-a"
+        }
+    ],
+    [
+        "tcpConnector",
+        {
+            "host": "127.0.0.1",
+            "port": "9191",
+            "address": "service-a"
+        }
+    ],
+    [
+        "tcpListener",
+        {
+            "host": "0.0.0.0",
+            "port": "8282",
+            "address": "service-b"
+        }
+    ],
+    [
+        "tcpConnector",
+        {
+            "host": "127.0.0.1",
+            "port": "9292",
+            "address": "service-b"
+        }
+    ],
+    [
+        "tcpListener",
+        {
+            "host": "0.0.0.0",
+            "port": "8383",
+            "address": "service-c"
+        }
+    ],
+    [
+        "tcpConnector",
+        {
+            "host": "127.0.0.1",
+            "port": "9393",
+            "address": "service-c"
+        }
+    ],
+    [
+        "log",
+        {
+            "module": "DEFAULT",
+            "enable": "info+",
+            "includeTimestamp": true,
+            "includeSource": true
+        }
+    ]
+]
