@@ -5,5 +5,10 @@ netstat -anp 2>/dev/null | grep CLOSE_WAIT | awk 'BEGIN { countsvc=0; countroute
 
 echo
 echo "SKSTAT"
-echo "skstat -c: $(skstat -c | wc -l)"
-echo "skstat -l: $(skstat -l | wc -l)"
+if ( command -v skstat > /dev/null 2>&1 ); then
+  echo "skstat -c: $(skstat -c | wc -l)"
+  echo "skstat -l: $(skstat -l | wc -l)"
+else
+  echo "skstat -c: $(podman exec router-locust skstat -c | wc -l)"
+  echo "skstat -l: $(podman exec router-locust skstat -l | wc -l)"
+fi
