@@ -31,6 +31,7 @@ start-router-container:
 	$(CONTAINER) run --name router-locust --network host -d -v ./topology-1/skrouterd-container.json:/tmp/skrouterd.json:z $(IMAGE) skrouterd -c /tmp/skrouterd.json
 
 start-services:
+	pip install -r requirements.txt
 	python server.py --service a --port 9191 > service-a.log 2>&1 &
 	python server.py --service b --port 9292 > service-b.log 2>&1 &
 	python server.py --service c --port 9393 > service-c.log 2>&1 &
